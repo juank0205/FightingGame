@@ -1,0 +1,11 @@
+{
+  "name": "fightinggame",
+  "version": "1.0.0",
+  "description": "First figting game",
+  "main": "./js/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Juan Camilo Echeverry",
+  "license": "ISC"
+}
