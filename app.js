@@ -1,13 +1,21 @@
-const express = require('express');
-const app = express();
-const serv = require('http').Server(app);
-const PORT = 3000;
+var express = require("express");
+const path = require('path');
+var app = express();
 
-app.use('/client', express.static(__dirname + '/client'));
+//SETTINGS
+app.set('PORT', process.env.PORT || 3000);
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/client');
+//STATIC FILES
+app.use(express.static(path.join(__dirname, 'client')));
+
+//START THE SERVER
+const server = app.listen(app.get('PORT'), () => { 
+    console.log(`Server running on port ${app.get('PORT')}`);
 });
 
 
-app.listen(PORT);
+const io = require('socket.io')(server);
+
+io.on('connection', () => {
+    console.log('connection');
+});

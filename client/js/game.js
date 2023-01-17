@@ -1,3 +1,5 @@
+io();
+
 //Import player classes
 import Player from './Player.js'
 
