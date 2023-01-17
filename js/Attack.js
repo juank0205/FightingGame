@@ -2,11 +2,13 @@ class Attack {
     #id;
     #position;
     #size;
+    #damage;
 
-    constructor({id, position, size}){
+    constructor({id, position, size, damage}){
         this.#id = id;
         this.#position = position;
         this.#size = size;
+        this.#damage = damage;
     }
 
     getPosition(){
@@ -15,6 +17,10 @@ class Attack {
 
     getSize(){
         return this.#size;
+    }
+
+    getDamage(){
+        return this.#damage;
     }
 }
 

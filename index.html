@@ -10,7 +10,7 @@
   <!-- Bootstrap CSS v5.2.1 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-
+  <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
@@ -20,10 +20,29 @@
 
   <main>
     <div class="container">
+      <!-- FPS counter -->
       <div class="row" id="fps"></div>
-      <div class="row">
+
+      <!-- Game canvas -->
+      <div class="game-container">
+        <div class="health-bar-container">
+
+          <div class="health-shrink-container">
+            <div class="health-bar"></div>
+            <div id="health-player-1" class="health-shrink"></div>
+          </div>
+
+          <div class="timer"></div>
+
+          <div class="health-shrink-container">
+            <div class="health-bar"></div>
+            <div id="health-player-2" class="health-shrink"></div>
+          </div>
+        </div>
         <canvas class="col"></canvas>
       </div>
+
+
       <div class="row">
         <!-- Keybind controller 1 -->
         <div class="col" id="control-1">

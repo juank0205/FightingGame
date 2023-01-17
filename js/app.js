@@ -25,18 +25,20 @@ const player1 = new Player.Sprite({
     playerNumber: 1,
     position: { x: 200, y: 0 }, 
     size: { x: 50, y: 150 },
-    moveSpeed: { x: 6, y: 7, fastFall: 5 }, 
-    gravity: 0.2 ,
-    color: 'red'
+    moveSpeed: { x: 6, y: 20, fastFall: 5 }, 
+    gravity: 1,
+    color: 'red',
+    healthBar: document.getElementById('health-player-1')
 });
 
 const player2 = new Player.Sprite({ 
     playerNumber: 2,
     position: { x: 600, y: 0 },
     size: { x: 50, y: 150 },
-    moveSpeed: { x: 6, y: 7, fastFall: 5 }, 
-    gravity: 0.2,
-    color: 'blue'
+    moveSpeed: { x: 6, y: 20, fastFall: 5 }, 
+    gravity: 1,
+    color: 'blue',
+    healthBar: document.getElementById('health-player-2')
 });
 
 setPlayer2Input();

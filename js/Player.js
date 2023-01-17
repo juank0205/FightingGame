@@ -3,20 +3,26 @@ import attack from "./Attack.js";
 
 class Sprite {
     #playerNumber
+    #health;
     #position;
     #size;
     #moveSpeed;
     #velocity;
     #gravity;
+
     #inAir;
     #isFastFalling;
+    #isFlipped;
+
     keybinds;
     #attacks;
     #color;
+
     #enemy;
 
-    constructor({playerNumber, position, size, moveSpeed, gravity, color}){
+    constructor({playerNumber, position, size, moveSpeed, gravity, color, healthBar}){
         this.#playerNumber = playerNumber;
+        this.#health = { hp: 100, healthBar: healthBar};
         this.#position = position;
         this.#size = size;
         this.#velocity = {x: 0, y: 0};
@@ -36,11 +42,14 @@ class Sprite {
             new attack.Attack({
                 id: 'Main Attack',
                 position: { x: 0, y: 0},
-                size: { x: 100, y: 50}
+                size: { x: 100, y: 50},
+                damage: 20
             })
         ]
     }
 
+    //--------------------------------------------------------
+    //GETTERS
     getPosition(){
         return this.#position;
     }
@@ -49,8 +58,26 @@ class Sprite {
         return this.#size;
     }
 
+    getVelocity(){
+        return this.#size;
+    }
+
+    getMoveSpeed(){
+        return this.#moveSpeed;
+    }
+    //--------------------------------------------------------
+    //SETTERS
+
     setKeybinds(index, key){
         this.keybinds[index].key = key;
+    }
+
+    flip(){
+        this.#isFlipped = true;
+    }
+
+    unflip(){
+        this.#isFlipped = false;
     }
 
     setEnemy(enemy){
@@ -76,6 +103,12 @@ class Sprite {
             }    
         } else{
             this.#velocity.y += this.#gravity;
+        }
+
+        if (this.#enemy.getPosition().x < this.getPosition().x){
+            this.flip();
+        } else{
+            this.unflip();
         }
     }
 
@@ -107,15 +140,35 @@ class Sprite {
 
     attack(index){
         c.fillStyle = 'green'
+        let attackSize = { x: this.#attacks[index].getSize().x, y: this.#attacks[index].getSize().y};
+        this.#isFlipped ? attackSize.x *= -1: attackSize.x *=1; 
+
         c.fillRect(
             this.#position.x + this.#attacks[index].getPosition().x,
             this.#position.y + this.#attacks[index].getPosition().y,
-            this.#attacks[index].getSize().x,
-            this.#attacks[index].getSize().y,  
+            attackSize.x,
+            attackSize.y,  
         )
-        if(this.#position.x + this.#attacks[index].getPosition().x + this.#attacks[index].getSize().x >= this.#enemy.getPosition().x){
-            console.log('hit');
+        if (!this.#isFlipped){
+            if(this.#position.x + this.#attacks[index].getPosition().x + attackSize.x >= this.#enemy.getPosition().x && 
+            this.#position.x + this.#attacks[index].getPosition().x  <= this.#enemy.getPosition().x + this.#enemy.getSize().x &&
+            this.#position.y + this.#attacks[index].getPosition().y + attackSize.y >= this.#enemy.getPosition().y &&
+            this.#position.y + this.#attacks[index].getPosition().y <= this.#enemy.getPosition().y + this.#enemy.getSize().y){
+                this.hit(this.#attacks[index].getDamage());
+            }
+        } else{
+            if(this.#position.x + this.#attacks[index].getPosition().x + attackSize.x <= this.#enemy.getPosition().x + this.#enemy.getSize().x && 
+            this.#position.x + this.#attacks[index].getPosition().x  >= this.#enemy.getPosition().x  &&
+            this.#position.y + this.#attacks[index].getPosition().y + attackSize.y >= this.#enemy.getPosition().y &&
+            this.#position.y + this.#attacks[index].getPosition().y <= this.#enemy.getPosition().y + this.#enemy.getSize().y){
+                this.hit(this.#attacks[index].getDamage());
+            }
         }
+    }
+
+    hit(dmg){
+        this.#health.hp -= dmg;
+        this.#health.healthBar.style.width = this.#health.hp;
     }
 }
 

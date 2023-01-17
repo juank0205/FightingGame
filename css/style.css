@@ -1,0 +1,47 @@
+*{
+    box-sizing: border-box;
+}
+
+.row{
+    margin: 0!important;
+}
+
+.game-container{
+    position: relative;
+    display: inline-block;
+}
+
+.health-bar-container{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.health-bar{
+    background-color: blue;
+    height: 30px;
+}
+
+.timer{
+    background-color: red;
+    height: 100px;
+    width: 100px;
+    flex-shrink: 0;
+}
+
+.health-shrink-container{
+    position: relative;
+    height: 30px;
+    width: 100%;
+}
+
+.health-shrink{
+    position: absolute;
+    background-color: yellow;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
