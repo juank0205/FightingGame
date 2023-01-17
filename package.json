@@ -1,11 +1,27 @@
 {
   "name": "fightinggame",
   "version": "1.0.0",
-  "description": "First figting game",
-  "main": "./js/app.js",
+  "description": "Web fighting game",
+  "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juank0205/FightingGame.git"
+  },
   "author": "Juan Camilo Echeverry",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/juank0205/FightingGame/issues"
+  },
+  "homepage": "https://github.com/juank0205/FightingGame#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.5.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
 }
