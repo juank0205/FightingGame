@@ -43,7 +43,12 @@ class Sprite {
                 id: 'Main Attack',
                 position: { x: 0, y: 0},
                 size: { x: 100, y: 50},
-                damage: 20
+                damage: 20,
+                frameData: {
+                    startup: 8,
+                    active: 30,
+                    endlag: 10
+                }
             })
         ]
     }
@@ -139,6 +144,13 @@ class Sprite {
     }
 
     attack(index){
+
+        if (this.#attack[index].getState() == 0){
+            setTimeout(() => {
+                
+            }, timeout);
+        }
+
         c.fillStyle = 'green'
         let attackSize = { x: this.#attacks[index].getSize().x, y: this.#attacks[index].getSize().y};
         this.#isFlipped ? attackSize.x *= -1: attackSize.x *=1; 
