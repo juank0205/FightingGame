@@ -1,7 +1,10 @@
+const room = getQueryParameter("room") || getRandomString(5);
+window.history.replaceState({}, document.title, updateQueryParameter('room', room));
 const socket = io();
 
 //Import player classes
 import Player from './Player.js'
+import { getQueryParameter, getRandomString, updateQueryParameter } from './utils.js';
 
 //Variable to track the current fps that the game is running at
 const fpsDisplayer = document.getElementById('fps');
@@ -14,6 +17,21 @@ var frameCount = 0;
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext("2d");
 
+//Login component
+const form = document.querySelector('#formLogin');
+const roomInput = document.querySelector('#room');
+let userName = ''; 
+document.querySelector('#showRoom').textContent = room;
+
+form.addEventListener('submit', e =>{
+    e.preventDefault();
+    userName = e.target.elements.username.value;
+    console.log(userName);
+    document.querySelector('#showName').textContent = userName;
+    userName = e.target.elements.username.value = '';
+    userName = e.target.elements.username.focus();
+});
+
 //Canvas width and height
 const cWidth = 1024;
 const cHeight = 576;
@@ -21,6 +39,14 @@ const cHeight = 576;
 //Setting the actual width and height from the variables created before
 canvas.height = cHeight;
 canvas.width = cWidth;
+
+socket.emit("joinServer");
+socket.emit("joinRoom", room);
+
+
+socket.on("playerJoined", () => {
+    console.log('player joined');
+});
 
 //Creting two instances of Player class, representing player one and player two
 const player1 = new Player.Sprite({ 
@@ -99,11 +125,11 @@ function checkInput() {
     player1.resetXMovement();
     player2.resetXMovement();
     //Player 1 functions
-    if (player1.keybinds[0].pressed) sendMove(0, 1, player1.jump());
-    if (player1.keybinds[1].pressed) player1.fastFall();
-    if (player1.keybinds[2].pressed) player1.moveLeft();
-    if (player1.keybinds[3].pressed) player1.moveRight();
-    if (player1.keybinds[4].pressed) player1.startAttack(0);
+    if (player1.keybinds[0].pressed) sendMove(0, 1);
+    if (player1.keybinds[1].pressed) sendMove(1, 1);
+    if (player1.keybinds[2].pressed) sendMove(2, 1);
+    if (player1.keybinds[3].pressed) sendMove(3, 1);
+    if (player1.keybinds[4].pressed) sendMove(4, 1);
     
     //Player 2 functions
     if (player2.keybinds[0].pressed) player2.jump();

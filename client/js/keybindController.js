@@ -3,7 +3,7 @@ import { player1, player2 } from "./game.js";
 const keybindsNumber = player1.keybinds.length;
 
 function addButtonListeners(){
-    for (let i=0; i<keybindsNumber*2; i++){
+    for (let i=0; i<keybindsNumber; i++){
         const button = document.getElementById('control-' + Math.ceil((i+1)/keybindsNumber)).querySelector('.movement-' + ((i%(keybindsNumber))+1));
         button.addEventListener('click', ()=>{
             button.textContent = 'Press a key';

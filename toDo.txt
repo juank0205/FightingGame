@@ -1,3 +1,2 @@
-Programar ataque con frame frameData
 recibir input otro cliente
-mostraar input ambos clientes 
+mostrar input ambos clientes 

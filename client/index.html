@@ -70,7 +70,7 @@
         </div>
 
         <!-- Keybind controller 2 -->
-        <div class="col" id="control-2">
+        <!-- <div class="col" id="control-2">
           <div class="row justify-content-center"> Player 2</div>
           <div class="row">
             <div class="col">Move up: </div>
@@ -92,6 +92,25 @@
             <div class="col">Main attack: </div>
             <button class="col movement-5">d</button>
           </div>
+        </div> -->
+
+        <div class="col" id="room-manager">
+
+          <div class="row">
+
+            <div class="row">Username: </div>
+            <form id="formLogin" >
+              <input id="username" type="text" plaaceholder="Enter username" required autocomplete="off"/>
+              <button class="btn btn-primary">Use</button>
+            </form>
+            
+            <div class="row">Current name: <p id="showName"></p></div>
+
+            <div class="row">Current Room: <p id="showRoom"></p></div>
+            <form id="formLogin" >
+              <input id="room" type="text" plaaceholder="Enter room" required autocomplete="off"/>
+              <button class="btn btn-primary">Join</button>
+            </form>
         </div>
 
       </div>
@@ -102,9 +121,13 @@
 
   </footer>
   <!-- Bootstrap JavaScript Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
-  
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+    integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
+    crossorigin="anonymous"></script>
+
   <script src="/socket.io/socket.io.js"></script>
   <script type="module" src="./js/game.js"></script>
   <script type="module" src="./js/keybindController.js"></script>
