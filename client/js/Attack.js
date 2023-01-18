@@ -4,10 +4,8 @@ class Attack {
     #size;
     #damage;
     #frameData;
-    #state;
 
     constructor({id, position, size, damage, frameData}){
-        this.#state = 0;
         this.#id = id;
         this.#position = position;
         this.#size = size;
@@ -28,9 +26,6 @@ class Attack {
         return this.#damage;
     }
 
-    getState(){
-        return this.#state;
-    }
 
     getFrameData(type){
         switch (type) {
@@ -39,15 +34,15 @@ class Attack {
                 break;
             case 'startup':
                 return this.#frameData.startup;
+            case 'active':
+                return this.#frameData.active;
+            case 'endlag':
+                return this.#frameData.endlag;
             default:
                 break;
         }
     }
 
-    //SETTERS
-    setState(newState){
-        this.#state = newState;
-    }
 }
 
 export default {Attack};

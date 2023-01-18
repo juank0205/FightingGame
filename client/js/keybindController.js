@@ -27,7 +27,7 @@ async function clickHandler(button, player, actionSelected){
 
 function waitingKeyPress(){
     return new Promise((resolve) => {
-        document.addEventListener('keydown', (e) =>{
+        document.addEventListener('keydown', e =>{
             resolve (e.key);
         });
     })    

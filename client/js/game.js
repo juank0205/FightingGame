@@ -1,4 +1,4 @@
-io();
+const socket = io();
 
 //Import player classes
 import Player from './Player.js'
@@ -83,6 +83,8 @@ function animate() {
         c.fillRect(0, 0, canvas.width, canvas.height)
 
         checkInput();
+        player1.manageFrameData();
+        player2.manageFrameData();
 
         player1.update(c);
         player2.update(c);
@@ -97,18 +99,25 @@ function checkInput() {
     player1.resetXMovement();
     player2.resetXMovement();
     //Player 1 functions
-    if (player1.keybinds[0].pressed) player1.jump();
+    if (player1.keybinds[0].pressed) sendMove(0, 1, player1.jump());
     if (player1.keybinds[1].pressed) player1.fastFall();
     if (player1.keybinds[2].pressed) player1.moveLeft();
     if (player1.keybinds[3].pressed) player1.moveRight();
-    if (player1.keybinds[4].pressed) player1.attack(0);
+    if (player1.keybinds[4].pressed) player1.startAttack(0);
     
     //Player 2 functions
     if (player2.keybinds[0].pressed) player2.jump();
     if (player2.keybinds[1].pressed) player2.fastFall();
     if (player2.keybinds[2].pressed) player2.moveLeft();
     if (player2.keybinds[3].pressed) player2.moveRight();
-    if (player2.keybinds[4].pressed) player2.attack(0);
+    if (player2.keybinds[4].pressed) player2.startAttack(0);
+}
+
+function sendMove(move, playerNumber){
+    socket.emit('input', {
+        playerNumber: playerNumber,
+        move: move
+    });
 }
 
 document.addEventListener('keydown', e => {

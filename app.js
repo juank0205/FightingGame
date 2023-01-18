@@ -16,6 +16,10 @@ const server = app.listen(app.get('PORT'), () => {
 
 const io = require('socket.io')(server);
 
-io.on('connection', () => {
-    console.log('connection');
+io.on('connection', socket => {
+    console.log('connection', socket.id);
+
+    socket.on('input', input => {
+        console.log(socket.id, ': ', input.move);
+    });
 });
