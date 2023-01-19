@@ -1,2 +1,3 @@
-recibir input otro cliente
-mostrar input ambos clientes 
+renderizar inputs de jugadores
+mecanica de vida
+manejar codigos de Error

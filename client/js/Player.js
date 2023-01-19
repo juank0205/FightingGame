@@ -2,7 +2,6 @@ import { c, cHeight } from "./game.js";
 import attack from "./Attack.js";
 
 class Sprite {
-    #playerNumber
     #health;
     #position;
     #size;
@@ -18,14 +17,12 @@ class Sprite {
     #isFlipped;
     #isAttacking;
 
-    keybinds;
     #attacks;
     #color;
 
     #enemy;
 
-    constructor({playerNumber, position, size, moveSpeed, gravity, color, healthBar}){
-        this.#playerNumber = playerNumber;
+    constructor({ position, size, moveSpeed, gravity, color, healthBar}){
         this.#health = { hp: 100, healthBar: healthBar};
         this.#position = position;
         this.#size = size;
@@ -40,13 +37,6 @@ class Sprite {
         this.#inAir = false;
         this.#isFastFalling = false;
         this.#isAttacking = 0;
-        this.keybinds = [
-            {key: 'w', pressed: false}, //Move up
-            {key: 's', pressed: false}, //Move down
-            {key: 'a', pressed: false}, //Move left
-            {key: 'd', pressed: false}, //Move right
-            {key: 'p', pressed: false} //Main attack
-        ]
         this.#attacks = [
             new attack.Attack({
                 id: 'Main Attack',
@@ -93,10 +83,6 @@ class Sprite {
     }
     //--------------------------------------------------------
     //SETTERS
-
-    setKeybinds(index, key){
-        this.keybinds[index].key = key;
-    }
 
     setFrameCounter(state, index){
         this.#frameCounter = this.#attacks[index].getFrameData(state);

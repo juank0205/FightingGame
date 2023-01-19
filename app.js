@@ -18,7 +18,7 @@ const io = require('socket.io')(server);
 
 io.on('connection', socket => {
     socket.on("createRoom", socketUser => {
-        if (socketUser.username == undefined) return io.to(socket.id).emit('createRoom', 0);
+        if (socketUser.username.length == 0) return io.to(socket.id).emit('createRoom', 0);
         if(socketUser.roomName in rooms){
             return io.to(socket.id).emit('createRoom', 0);
         }else{
@@ -28,13 +28,29 @@ io.on('connection', socket => {
                 room: socketUser.roomName
             }
             rooms[socketUser.roomName] = [user];
-            console.log(rooms);
             socket.join(socketUser.roomName);
             return io.to(user.id).emit('createRoom', 1);
         }
-    }) 
+    });
+    
+    socket.on("joinRoom", socketUser => {
+        if (socketUser.username == '') return io.to(socket.id).emit('joinRoom', 0);
+        if (!(rooms.hasOwnProperty(socketUser.roomName))){
+            return io.to(socket.id).emit('joinRoom', 1);
+        } else if(rooms[socketUser.roomName].length == 2){
+            return io.to(socket.id).emit('joinRoom', 2);
+        } else{
+            const user = {
+                username: socketUser.username,
+                id: socket.id,
+                room: socketUser.roomName
+            }
+            rooms[socketUser.roomName].push(user);
+            socket.join(socketUser.roomName);
+            console.log(rooms);
+            return io.in(socketUser.roomName).emit('joinRoom', {code: 3,  room:rooms[socketUser.roomName]});
+        }
+    });
 
-    // socket.on('input', input => {
-    //     console.log(socket.id, ': ', input.move);
-    // }); 
+    
 });

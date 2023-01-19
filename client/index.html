@@ -24,7 +24,7 @@
       <div class="row" id="fps"></div>
 
       <!-- Game canvas -->
-      <div class="game-container">
+      <div id="gameManager" class="game-container hide">
         <div class="health-bar-container">
 
           <div class="health-shrink-container">
@@ -43,10 +43,10 @@
       </div>
 
 
-      <div class="row">
+      <divc class="row">
         <!-- Keybind controller 1 -->
-        <div class="col" id="control-1">
-          <div class="row justify-content-center"> Player 1</div>
+        <div class="col hide" id="control-1">
+          <div class="row justify-content-center"> Player Keybinds</div>
           <div class="row">
             <div class="col">Move up: </div>
             <button class="col movement-1">w</button>
@@ -69,62 +69,32 @@
           </div>
         </div>
 
-        <!-- Keybind controller 2 -->
-        <!-- <div class="col" id="control-2">
-          <div class="row justify-content-center"> Player 2</div>
+        <div class="col" id="roomManager">
           <div class="row">
-            <div class="col">Move up: </div>
-            <button class="col movement-1">ArrowUp</button>
-          </div>
-          <div class="row">
-            <div class="col">Move down: </div>
-            <button class="col movement-2">ArrowDown</button>
-          </div>
-          <div class="row">
-            <div class="col">Move left: </div>
-            <button class="col movement-3">ArrowLeft</button>
-          </div>
-          <div class="row">
-            <div class="col">Move right: </div>
-            <button class="col movement-4">ArrowRight</button>
-          </div>
-          <div class="row">
-            <div class="col">Main attack: </div>
-            <button class="col movement-5">d</button>
-          </div>
-        </div> -->
-
-        <div class="col" id="room-manager">
-
-          <div class="row">
-
-            <div class="row">Username: </div>
-            <form id="formLogin">
-              <input id="username" type="text" plaaceholder="Enter username" required autocomplete="off" />
-              <button class="btn btn-primary">Use</button>
-            </form>
-
-            <div class="row">
-              <div class="col">Current name: </div>
-              <div class="col" id="showName"></div>
-            </div>
-
-            <div>Room:</div>
-            <form id="formRoom">
-              <div class="row">
+            <div class="col">
+              <div class="row">Username: </div>
+              <form id="formLogin">
+                <input id="username" type="text" plaaceholder="Enter username" required autocomplete="off" />
+                <button class="btn btn-primary">Use</button>
+              </form>
+                <div class="col">Current name: </div>
+                <div class="col" id="showName"></div>
+                <div>Room:</div>
+              <form id="formRoom">
                 <input class="col" id="room" type="text" plaaceholder="Enter room" required autocomplete="off" />
-                <p class="col" id="showRoom"></p>
-              </div>
-            </form>
-            <div class="row">
-                <button id="joinBtn" class="col-5 btn btn-primary">Join</button>
-                <div class="col-2"></div>
-                <button id="createBtn" class="col-5 btn btn-primary">Create</button>
+                <button class="btn btn-primary">Use</button>
+              </form>
+              <p class="col" id="showRoom"></p>
+            </div>
+            <div class="col">
+              <button id="joinBtn" class="col-5 btn btn-primary">Join</button>
+              <div class="col-2"></div>
+              <button id="createBtn" class="col-5 btn btn-primary">Create</button>
             </div>
           </div>
 
         </div>
-      </div>
+    </div>
   </main>
 
   <footer>
@@ -140,6 +110,7 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script type="module" src="./js/game.js"></script>
+  <script type="module" src="./js/client.js"></script>
   <script type="module" src="./js/keybindController.js"></script>
 </body>
 
