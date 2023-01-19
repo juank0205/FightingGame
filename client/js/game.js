@@ -18,18 +18,34 @@ const canvas = document.querySelector('canvas');
 const c = canvas.getContext("2d");
 
 //Login component
-const form = document.querySelector('#formLogin');
-const roomInput = document.querySelector('#room');
+const formLogin = document.getElementById('formLogin');
+const formRoom = document.getElementById('formRoom');
+const createBtn = document.getElementById('createBtn');
+const joinBtn = document.getElementById('joinBtn');
+
 let userName = ''; 
 document.querySelector('#showRoom').textContent = room;
 
-form.addEventListener('submit', e =>{
+formLogin.addEventListener('submit', e =>{
     e.preventDefault();
     userName = e.target.elements.username.value;
-    console.log(userName);
     document.querySelector('#showName').textContent = userName;
-    userName = e.target.elements.username.value = '';
-    userName = e.target.elements.username.focus();
+    e.target.elements.username.value = '';
+    e.target.elements.username.focus();
+});
+
+createBtn.addEventListener('click', e => {
+    e.preventDefault();
+    socket.emit('createRoom', {
+        username: userName,
+        roomName: room
+    });
+});
+
+
+socket.on("createRoom", response => {
+    if (response == 0) console.log('Error');
+    if(response == 1) console.log('Room created');
 });
 
 //Canvas width and height
@@ -40,13 +56,6 @@ const cHeight = 576;
 canvas.height = cHeight;
 canvas.width = cWidth;
 
-socket.emit("joinServer");
-socket.emit("joinRoom", room);
-
-
-socket.on("playerJoined", () => {
-    console.log('player joined');
-});
 
 //Creting two instances of Player class, representing player one and player two
 const player1 = new Player.Sprite({ 
