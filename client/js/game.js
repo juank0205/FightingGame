@@ -1,24 +1,25 @@
-import {playerNumber, enemyId, socket} from './client.js';
+import { playerNumber, room, socket } from './client.js';
 import Player from './Player.js';
 
-const player1 = new Player.Sprite({ 
-    position: { x: 200, y: 0 }, 
+const player1 = new Player.Sprite({
+    position: { x: 200, y: 0 },
     size: { x: 50, y: 150 },
-    moveSpeed: { x: 6, y: 20, fastFall: 5 }, 
+    moveSpeed: { x: 6, y: 20, fastFall: 5 },
     gravity: 1,
     color: 'red'
 });
 
-const player2 = new Player.Sprite({ 
-    position: { x: 600, y: 0 }, 
+const player2 = new Player.Sprite({
+    position: { x: 600, y: 0 },
     size: { x: 50, y: 150 },
-    moveSpeed: { x: 6, y: 20, fastFall: 5 }, 
+    moveSpeed: { x: 6, y: 20, fastFall: 5 },
     gravity: 1,
     color: 'blue'
 });
 
 let player;
 let enemy;
+const playerHolder = [player, enemy];
 
 //Variable to track the current fps that the game is running at
 const fpsDisplayer = document.getElementById('fps');
@@ -40,18 +41,18 @@ canvas.height = cHeight;
 canvas.width = cWidth;
 
 let keybinds = [
-    {key: 'w', pressed: false}, //Move up
-    {key: 's', pressed: false}, //Move down
-    {key: 'a', pressed: false}, //Move left
-    {key: 'd', pressed: false}, //Move right
-    {key: 'p', pressed: false} //Main attack
+    { key: 'w', pressed: false }, //Move up
+    { key: 's', pressed: false }, //Move down
+    { key: 'a', pressed: false }, //Move left
+    { key: 'd', pressed: false }, //Move right
+    { key: 'p', pressed: false } //Main attack
 ]
 
 function setEnemies() {
-    if(playerNumber == 1){
+    if (playerNumber == 1) {
         player = player1;
         enemy = player2;
-    } else{
+    } else {
         player = player2;
         enemy = player1;
     }
@@ -60,41 +61,22 @@ function setEnemies() {
 }
 
 function checkInput() {
-    player1.resetXMovement();
-    player2.resetXMovement();
+    player.resetXMovement();
     //Player 1 functions
-    if (keybinds[0].pressed) sendMove(0, 1, player.jump());
-    if (keybinds[1].pressed) sendMove(1, 1, player.fastFall());
-    if (keybinds[2].pressed) sendMove(2, 1, player.moveLeft());
-    if (keybinds[3].pressed) sendMove(3, 1, player.moveRight());
-    if (keybinds[4].pressed) sendMove(4, 1), player.startAttack(0);
-}
-
-function sendMove(move, playerNumber){
-    socket.to(enemyId).emit('input', move);
+    if (keybinds[0].pressed) player.jump();
+    if (keybinds[1].pressed) player.fastFall();
+    if (keybinds[2].pressed) player.moveLeft();
+    if (keybinds[3].pressed) player.moveRight();
+    if (keybinds[4].pressed) player.startAttack(0);
 }
 
 socket.on("sendMove", move => {
-    switch (move){
-        case 0:
-            enemy.jump();
-            break;
-        case 1:
-            enemy.fastFall();
-            break;
-        case 2:
-            enemy.moveLeft();
-            break;
-        case 3:
-            enemy.moveRight();
-            break;
-        case 0:
-            enemy.startAttack(0);
-            break;
-    }
+    if(playerNumber == move.number) return;
+    console.log(move.x, move.y);
+    return enemy.setPosition(move.x, move.y);
 });
 
-function addKeyboardListener(){
+function addKeyboardListener() {
     document.addEventListener('keydown', e => {
         switch (e.key) {
             //Player inputs
@@ -114,31 +96,32 @@ function addKeyboardListener(){
                 keybinds[4].pressed = true;
                 break;
         }
-    
-        document.addEventListener('keyup', e => {
-            switch (e.key) {
-                //Player Inputs
-                case keybinds[0].key:
-                    keybinds[0].pressed = false;
-                    break;
-                case keybinds[1].key:
-                    keybinds[1].pressed = false;
-                    break;
-                case keybinds[2].key:
-                    keybinds[2].pressed = false;
-                    break;
-                case keybinds[3].key:
-                    keybinds[3].pressed = false;
-                    break;
-                case keybinds[4].key:
-                    keybinds[4].pressed = false;
-                    break;
-            }
-        });
 
         //Prevent default scrolling from these keys
-        if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+        if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(e.code) > -1) {
             e.preventDefault();
+        }
+
+    });
+
+    document.addEventListener('keyup', e => {
+        switch (e.key) {
+            //Player Inputs
+            case keybinds[0].key:
+                keybinds[0].pressed = false;
+                break;
+            case keybinds[1].key:
+                keybinds[1].pressed = false;
+                break;
+            case keybinds[2].key:
+                keybinds[2].pressed = false;
+                break;
+            case keybinds[3].key:
+                keybinds[3].pressed = false;
+                break;
+            case keybinds[4].key:
+                keybinds[4].pressed = false;
+                break;
         }
     });
 }
@@ -157,6 +140,8 @@ function startAnimating(fps) {
 function animate() {
     if (player1 == null || player2 == null) return;
     requestAnimationFrame(animate);
+    socket.emit('sendMove', { x: player.getPosition().x, y: player.getPosition().y, number: playerNumber, roomName: room });
+
 
     now = Date.now();
     elapsed = now - then;
@@ -180,4 +165,4 @@ function animate() {
     }
 }
 
-export { c, cHeight, cWidth, startAnimating, keybinds};
+export { c, cHeight, cWidth, startAnimating, keybinds };

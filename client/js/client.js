@@ -3,15 +3,15 @@ window.history.replaceState({}, document.title, updateQueryParameter('room', roo
 const socket = io();
 let id = '';
 
-id = socket.io.engine.id;
-
+id = null;
 let playerNumber = null;
-let enemyId;
 
+socket.on("connected", socketId => {
+    id = socketId;
+});
 
 //Import player classes
-import {startAnimating} from './game.js'
-import Player from './Player.js'
+import {startAnimating} from './game.js';
 import { getQueryParameter, getRandomString, updateQueryParameter } from './utils.js';
 
 
@@ -70,9 +70,7 @@ socket.on("joinRoom", response => {
     if(response.code == 3) console.log('Room Joined');
     for(let i=0; i<response.room.length; i++){
         if (response.room[i].id == id){
-            playerNumber = i;
-        } else{
-            enemyId = response.room[i].id;
+            playerNumber = i+1;
         }
     }
     document.getElementById('gameManager').classList.toggle('hide');
@@ -81,4 +79,4 @@ socket.on("joinRoom", response => {
     startAnimating(60);
 });
 
-export { playerNumber, enemyId, socket };
+export { playerNumber, room, socket };

@@ -103,6 +103,12 @@ class Sprite {
     setActiveAttack(index){
         this.#activeAttackIndex = index;
     }
+
+    setPosition(x, y){
+        this.#position.x = x;
+        this.#position.y = y;
+    }
+
     //--------------------------------------------------------
     //FUNCTIONS
 

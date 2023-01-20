@@ -15,15 +15,7 @@ function addButtonListeners(){
 async function clickHandler(button, actionSelected){
     let key = await waitingKeyPress();
     button.textContent = key;
-    switch (playerNumber){
-        case 1:
-            keybinds[actionSelected-1].key = key;
-            player1.setKeybinds(actionSelected-1, key);
-            break;
-        case 2:
-            player2.setKeybinds(actionSelected-1, key);
-            break;
-    }
+    keybinds[actionSelected-1].key = key;
 }
 
 function waitingKeyPress(){

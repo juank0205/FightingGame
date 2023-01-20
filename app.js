@@ -17,6 +17,7 @@ const server = app.listen(app.get('PORT'), () => {
 const io = require('socket.io')(server);
 
 io.on('connection', socket => {
+    socket.emit("connected", socket.id);
     socket.on("createRoom", socketUser => {
         if (socketUser.username.length == 0) return io.to(socket.id).emit('createRoom', 0);
         if(socketUser.roomName in rooms){
@@ -50,6 +51,10 @@ io.on('connection', socket => {
             console.log(rooms);
             return io.in(socketUser.roomName).emit('joinRoom', {code: 3,  room:rooms[socketUser.roomName]});
         }
+    });
+    
+    socket.on("sendMove", input => {
+        return io.in(input.roomName).emit("sendMove", {number: input.number, x: input.x, y: input.y})
     });
 
     
