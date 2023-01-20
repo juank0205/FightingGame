@@ -5,12 +5,15 @@ class Attack {
     #damage;
     #frameData;
 
+    #hasHit;
+
     constructor({id, position, size, damage, frameData}){
         this.#id = id;
         this.#position = position;
         this.#size = size;
         this.#damage = damage;
         this.#frameData = frameData;
+        this.#hasHit = false;
     }
 
     //GETTERS-------------------------
@@ -24,6 +27,10 @@ class Attack {
 
     getDamage(){
         return this.#damage;
+    }
+
+    getHitState(){
+        return this.#hasHit;
     }
 
 
@@ -41,6 +48,11 @@ class Attack {
             default:
                 break;
         }
+    }
+
+    //SETTER
+    setHitState(state){
+        this.#hasHit = state;
     }
 
 }

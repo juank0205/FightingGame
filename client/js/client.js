@@ -2,6 +2,7 @@ let room = getQueryParameter("room") || getRandomString(5);
 window.history.replaceState({}, document.title, updateQueryParameter('room', room));
 const socket = io();
 let id = '';
+let enemyId = null;
 
 id = null;
 let playerNumber = null;
@@ -71,6 +72,8 @@ socket.on("joinRoom", response => {
     for(let i=0; i<response.room.length; i++){
         if (response.room[i].id == id){
             playerNumber = i+1;
+        } else{
+            enemyId = response.room[i].id;
         }
     }
     document.getElementById('gameManager').classList.toggle('hide');
@@ -79,4 +82,4 @@ socket.on("joinRoom", response => {
     startAnimating(60);
 });
 
-export { playerNumber, room, socket };
+export { playerNumber, socket, enemyId };

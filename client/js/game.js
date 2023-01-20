@@ -1,4 +1,4 @@
-import { playerNumber, room, socket } from './client.js';
+import { playerNumber, socket, enemyId } from './client.js';
 import Player from './Player.js';
 
 const player1 = new Player.Sprite({
@@ -140,7 +140,7 @@ function startAnimating(fps) {
 function animate() {
     if (player1 == null || player2 == null) return;
     requestAnimationFrame(animate);
-    socket.emit('sendMove', { x: player.getPosition().x, y: player.getPosition().y, number: playerNumber, roomName: room });
+    socket.emit('sendMove', { x: player.getPosition().x, y: player.getPosition().y, number: playerNumber, enemy: enemyId });
 
 
     now = Date.now();

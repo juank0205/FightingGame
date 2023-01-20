@@ -54,7 +54,7 @@ io.on('connection', socket => {
     });
     
     socket.on("sendMove", input => {
-        return io.in(input.roomName).emit("sendMove", {number: input.number, x: input.x, y: input.y})
+        io.to(input.enemy).emit("sendMove", {number: input.number, x: input.x, y: input.y})
     });
 
     
