@@ -69,13 +69,14 @@ function checkInput() {
     if (keybinds[1].pressed) player.fastFall();
     if (keybinds[2].pressed) player.moveLeft();
     if (keybinds[3].pressed) player.moveRight();
-    if (keybinds[4].pressed) player.startAttack(0);
+    if (keybinds[4].pressed && player.getCanAttack()) player.startAttack(0);
 }
 
 socket.on("sendMove", move => {
-    if(playerNumber == move.number) return;
-    return enemy.setPosition(move.x, move.y);
+    enemy.setPosition(move.x, move.y);
 });
+
+socket.on("sendAttack", attack => enemy.startAttack(attack));
 
 function addKeyboardListener() {
     document.addEventListener('keydown', e => {
@@ -94,7 +95,10 @@ function addKeyboardListener() {
                 keybinds[3].pressed = true;
                 break;
             case keybinds[4].key:
-                keybinds[4].pressed = true;
+                if (player.getCanAttack() == true){
+                    keybinds[4].pressed = true;
+                    socket.emit('sendAttack', {number: playerNumber, enemy: enemyId, attack: 0});
+                }
                 break;
         }
 
@@ -121,6 +125,7 @@ function addKeyboardListener() {
                 keybinds[3].pressed = false;
                 break;
             case keybinds[4].key:
+                player.setCanAttack(true);
                 keybinds[4].pressed = false;
                 break;
         }

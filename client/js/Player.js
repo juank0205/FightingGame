@@ -15,6 +15,7 @@ class Sprite {
     #inAir;
     #isFastFalling;
     #isFlipped;
+    #canAttack;
     #isAttacking;
 
 
@@ -38,6 +39,8 @@ class Sprite {
         this.#inAir = false;
         this.#isFastFalling = false;
         this.#isAttacking = 0;
+        this.#canAttack = true;
+
         this.#attacks = [
             new attack.Attack({
                 id: 'Main Attack',
@@ -82,6 +85,11 @@ class Sprite {
     getActiveAttack(){
         return this.#activeAttackIndex;
     }
+
+    getCanAttack(){
+        return this.#canAttack;
+    }
+
     //--------------------------------------------------------
     //SETTERS
 
@@ -110,12 +118,17 @@ class Sprite {
         this.#position.y = y;
     }
 
+    setCanAttack(value){
+        this.#canAttack = value;
+    }
+
     //--------------------------------------------------------
     //FUNCTIONS
 
     startAttack(index){
         if (this.getAttackingState()  == 0){
             this.setActiveAttack(index);
+            this.setCanAttack(false);
             this.setAtackState(1);
             this.setFrameCounter('startup', index);
             this.manageFrameData();
@@ -216,17 +229,25 @@ class Sprite {
         c.fillStyle = 'green'
         let attackSize = { x: this.#attacks[index].getSize().x, y: this.#attacks[index].getSize().y};
         this.#isFlipped ? attackSize.x *= -1: attackSize.x *=1; 
-
-        c.fillRect(
-            this.#position.x + this.#attacks[index].getPosition().x,
-            this.#position.y + this.#attacks[index].getPosition().y,
-            attackSize.x,
-            attackSize.y,  
-        )
+        if (this.#isFlipped){
+            c.fillRect(
+                this.getPosition().x + this.#attacks[index].getPosition().x,
+                this.getPosition().y + this.#attacks[index].getPosition().y,
+                attackSize.x,
+                attackSize.y,  
+            )
+        } else{
+            c.fillRect(
+                this.getPosition().x + this.getSize().x + this.#attacks[index].getPosition().x,
+                this.getPosition().y + this.#attacks[index].getPosition().y,
+                attackSize.x,
+                attackSize.y,  
+            )
+        }
         if (this.#attacks[this.getActiveAttack()].getHitState()) return;
         if (!this.#isFlipped){
-            if(this.#position.x + this.#attacks[index].getPosition().x + attackSize.x >= this.#enemy.getPosition().x && 
-            this.#position.x + this.#attacks[index].getPosition().x  <= this.#enemy.getPosition().x + this.#enemy.getSize().x &&
+            if(this.#position.x + this.getSize().x + this.#attacks[index].getPosition().x + attackSize.x >= this.#enemy.getPosition().x && 
+            this.#position.x + this.getSize().x + this.#attacks[index].getPosition().x  <= this.#enemy.getPosition().x + this.#enemy.getSize().x &&
             this.#position.y + this.#attacks[index].getPosition().y + attackSize.y >= this.#enemy.getPosition().y &&
             this.#position.y + this.#attacks[index].getPosition().y <= this.#enemy.getPosition().y + this.#enemy.getSize().y){
                 this.hit(this.#attacks[index].getDamage());
