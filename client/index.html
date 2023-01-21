@@ -43,58 +43,68 @@
       </div>
 
 
-      <divc class="row">
-        <!-- Keybind controller 1 -->
-        <div class="col hide" id="control-1">
-          <div class="row justify-content-center"> Player Keybinds</div>
-          <div class="row">
-            <div class="col">Move up: </div>
-            <button class="col movement-1">w</button>
-          </div>
-          <div class="row">
-            <div class="col">Move down: </div>
-            <button class="col movement-2">s</button>
-          </div>
-          <div class="row">
-            <div class="col">Move left: </div>
-            <button class="col movement-3">a</button>
-          </div>
-          <div class="row">
-            <div class="col">Move right: </div>
-            <button class="col movement-4">d</button>
-          </div>
-          <div class="row">
-            <div class="col">Main attack: </div>
-            <button class="col movement-5">d</button>
-          </div>
+
+      <!-- Keybind controller 1 -->
+      <div class="col hide" id="control-1">
+        <div class="row justify-content-center"> Player Keybinds</div>
+        <div class="row">
+          <div class="col">Move up: </div>
+          <button class="col movement-1">w</button>
+        </div>
+        <div class="row">
+          <div class="col">Move down: </div>
+          <button class="col movement-2">s</button>
+        </div>
+        <div class="row">
+          <div class="col">Move left: </div>
+          <button class="col movement-3">a</button>
+        </div>
+        <div class="row">
+          <div class="col">Move right: </div>
+          <button class="col movement-4">d</button>
+        </div>
+        <div class="row">
+          <div class="col">Main attack: </div>
+          <button class="col movement-5">d</button>
+        </div>
+      </div>
+
+      <div class="container" id="roomManager">
+        
+        <div class="login">
+          <h1>LOGIN</h1>
+          <form id="formLogin">
+            <div class="row">Username: </div>
+            <input id="username" type="text" plaaceholder="Enter username" required autocomplete="off" />
+            <div>Room:</div>
+            <input class="col" id="room" type="text" plaaceholder="Enter room" required autocomplete="off" />
+            <button class="btn btn-primary hide">Use</button>
+          </form>
+        </div>
+        
+        <div id="room-buttons" class="buttons row">
+          <button id="joinBtn" class="col-5 btn btn-primary">Join</button>
+          <div class="col-2"></div>
+          <button id="createBtn" class="col-5 btn btn-primary">Create</button>
+        </div>
+        
+        <div id="errorFeedback"></div>
+
+        <div id="room-feedback" class="hide">
+          <div class="col">Room Created succesfully, waiting for a player to join ...</div>
+        </div>
+        
+        <div class="info">
+          <div class="col">Current name: </div>
+          <div class="col" id="showName"></div>
+          <div class="col">Current room: </div>
+          <p class="col" id="showRoom"></p>
         </div>
 
-        <div class="col" id="roomManager">
-          <div class="row">
-            <div class="col">
-              <div class="row">Username: </div>
-              <form id="formLogin">
-                <input id="username" type="text" plaaceholder="Enter username" required autocomplete="off" />
-                <button class="btn btn-primary">Use</button>
-              </form>
-                <div class="col">Current name: </div>
-                <div class="col" id="showName"></div>
-                <div>Room:</div>
-              <form id="formRoom">
-                <input class="col" id="room" type="text" plaaceholder="Enter room" required autocomplete="off" />
-                <button class="btn btn-primary">Use</button>
-              </form>
-              <p class="col" id="showRoom"></p>
-            </div>
-            <div class="col">
-              <button id="joinBtn" class="col-5 btn btn-primary">Join</button>
-              <div class="col-2"></div>
-              <button id="createBtn" class="col-5 btn btn-primary">Create</button>
-            </div>
-          </div>
 
-        </div>
-    </div>
+
+      </div>
+
   </main>
 
   <footer>

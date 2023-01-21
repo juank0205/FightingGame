@@ -18,9 +18,11 @@ import { getQueryParameter, getRandomString, updateQueryParameter } from './util
 
 //Login component
 const formLogin = document.getElementById('formLogin');
-const formRoom = document.getElementById('formRoom');
 const createBtn = document.getElementById('createBtn');
 const joinBtn = document.getElementById('joinBtn');
+const buttons = document.getElementById('room-buttons');
+const feedback = document.getElementById('room-feedback');
+const error = document.getElementById('errorFeedback');
 
 let userName = ''; 
 document.querySelector('#showRoom').textContent = room;
@@ -28,9 +30,11 @@ document.querySelector('#showRoom').textContent = room;
 formLogin.addEventListener('submit', e =>{
     e.preventDefault();
     userName = e.target.elements.username.value;
+    room = e.target.elements.room.value;
     document.querySelector('#showName').textContent = userName;
-    e.target.elements.username.value = '';
+    document.querySelector('#showRoom').textContent = room;
     e.target.elements.username.focus();
+    e.target.elements.room.focus();
 });
 
 createBtn.addEventListener('click', e => {
@@ -39,15 +43,6 @@ createBtn.addEventListener('click', e => {
         username: userName,
         roomName: room
     });
-});
-
-formRoom.addEventListener('submit', e =>{
-    e.preventDefault();
-    room = e.target.elements.room.value;
-    console.log(room);
-    document.querySelector('#showRoom').textContent = room;
-    e.target.elements.room.value = '';
-    e.target.elements.room.focus();
 });
 
 joinBtn.addEventListener('click', e =>{
@@ -60,26 +55,34 @@ joinBtn.addEventListener('click', e =>{
 
 
 socket.on("createRoom", response => {
-    if (response == 0) return console.log('Error');
+    if (response == 0) return error.textContent = 'Type a username';
     if(response == 1) console.log('Room created');
+    error.textContent = '';
+    buttons.classList.toggle('hide');
+    formLogin.classList.toggle('hide');
+    feedback.classList.toggle('hide');
 });
 
 socket.on("joinRoom", response => {
-    if (response.code == 0) return console.log('Error');
-    if(response.code == 1) return console.log('Room does not exist');
-    if(response.code == 2) return console.log('Room full');
-    if(response.code == 3) console.log('Room Joined');
-    for(let i=0; i<response.room.length; i++){
-        if (response.room[i].id == id){
-            playerNumber = i+1;
-        } else{
-            enemyId = response.room[i].id;
+    console.log(response.code);
+    if (response.code == 0) return error.textContent = 'Type a valid username';
+    if(response.code == 1) return error.textContent = 'Room does not exist';
+    if(response.code == 2) return error.textContent = 'Room full';
+    if(response.code == 3) {
+        console.log('Room Joined');
+        for(let i=0; i<response.room.length; i++){
+            if (response.room[i].id == id){
+                playerNumber = i+1;
+            } else{
+                enemyId = response.room[i].id;
+            }
         }
+        error.textContent = '';
+        document.getElementById('gameManager').classList.toggle('hide');
+        document.getElementById('control-1').classList.toggle('hide');
+        document.getElementById('roomManager').classList.toggle('hide');
+        startAnimating(60);
     }
-    document.getElementById('gameManager').classList.toggle('hide');
-    document.getElementById('control-1').classList.toggle('hide');
-    document.getElementById('roomManager').classList.toggle('hide');
-    startAnimating(60);
 });
 
 export { playerNumber, socket, enemyId };
