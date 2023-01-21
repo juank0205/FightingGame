@@ -51,6 +51,19 @@ class Sprite {
                     startup: 6,
                     active: 15,
                     endlag: 6
+                },
+                moveSpeed: 2
+            }),
+            new attack.Attack({
+                id: 'Proyectile',
+                position: { x: 0, y: 0},
+                size: { x:100, y:50 },
+                damage: 10,
+                isProyectile: true,
+                frameData: {
+                    startup: 12,
+                    active: 60,
+                    endlag: 0
                 }
             })
         ]
@@ -129,6 +142,7 @@ class Sprite {
         if (this.getAttackingState()  == 0){
             this.setActiveAttack(index);
             this.setCanAttack(false);
+            if(this.#attacks[getActiveAttack()].isProyectile)
             this.setAtackState(1);
             this.setFrameCounter('startup', index);
             this.manageFrameData();

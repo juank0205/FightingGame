@@ -6,13 +6,17 @@ class Attack {
     #frameData;
 
     #hasHit;
+    #moveSpeed;
+    #isProyectile;
 
-    constructor({id, position, size, damage, frameData}){
+    constructor({ id, position, size, damage, frameData, moveSpeed, isProyectile }){
         this.#id = id;
         this.#position = position;
         this.#size = size;
         this.#damage = damage;
         this.#frameData = frameData;
+        this.isProyectile = isProyectile;
+        this.#moveSpeed = moveSpeed;
         this.#hasHit = false;
     }
 
@@ -33,6 +37,10 @@ class Attack {
         return this.#hasHit;
     }
 
+    getIsProyectile(){
+        return this.#isProyectile;
+    }
+
 
     getFrameData(type){
         switch (type) {
@@ -47,9 +55,17 @@ class Attack {
         }
     }
 
-    //SETTER
+    //SETTERS--------------------------
     setHitState(state){
         this.#hasHit = state;
+    }
+
+    //FUNCTIONS------------------------
+    move(flipped){
+        if (flipped){
+            this.#position -= this.#moveSpeed;
+        }
+        this.#position += this.#moveSpeed;
     }
 
 }
