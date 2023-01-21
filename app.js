@@ -56,9 +56,8 @@ io.on('connection', socket => {
         }
     });
     
-    socket.on("sendMove", input => {
-        io.to(input.enemy).emit("sendMove", {number: input.number, x: input.x, y: input.y})
-    });  
+    socket.on("sendMove", input => io.to(input.enemy).emit("sendMove", { x: input.x, y: input.y}));  
+    socket.on("sendAttack", input => io.to(input.enemy).emit("sendAttack", input.attack));  
 
     socket.on('disconnect', () => {
         if (!(socket.id in users)) return;

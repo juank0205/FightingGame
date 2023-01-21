@@ -38,15 +38,12 @@ class Attack {
         switch (type) {
             case undefined:
                 return this.#frameData;
-                break;
             case 'startup':
                 return this.#frameData.startup;
             case 'active':
                 return this.#frameData.active;
             case 'endlag':
                 return this.#frameData.endlag;
-            default:
-                break;
         }
     }
 
