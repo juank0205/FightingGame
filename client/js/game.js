@@ -6,7 +6,8 @@ const player1 = new Player.Sprite({
     size: { x: 50, y: 150 },
     moveSpeed: { x: 6, y: 20, fastFall: 5 },
     gravity: 1,
-    color: 'red'
+    color: 'red',
+    healthBar: document.getElementById('health-player-2')
 });
 
 const player2 = new Player.Sprite({
@@ -14,7 +15,8 @@ const player2 = new Player.Sprite({
     size: { x: 50, y: 150 },
     moveSpeed: { x: 6, y: 20, fastFall: 5 },
     gravity: 1,
-    color: 'blue'
+    color: 'blue',
+    healthBar: document.getElementById('health-player-1')
 });
 
 let player;
@@ -72,7 +74,6 @@ function checkInput() {
 
 socket.on("sendMove", move => {
     if(playerNumber == move.number) return;
-    console.log(move.x, move.y);
     return enemy.setPosition(move.x, move.y);
 });
 

@@ -17,6 +17,7 @@ class Sprite {
     #isFlipped;
     #isAttacking;
 
+
     #attacks;
     #color;
 
@@ -117,7 +118,7 @@ class Sprite {
             this.setActiveAttack(index);
             this.setAtackState(1);
             this.setFrameCounter('startup', index);
-            this.manageFrameData(index);
+            this.manageFrameData();
         }
     }
 
@@ -141,6 +142,7 @@ class Sprite {
         if(this.getAttackingState() == 3){
             if (this.getFrameCounter() == 0){
                 this.setAtackState(0);
+                this.#attacks[this.getActiveAttack()].setHitState(false);
                 this.setActiveAttack(null)
             }
         }
@@ -221,6 +223,7 @@ class Sprite {
             attackSize.x,
             attackSize.y,  
         )
+        if (this.#attacks[this.getActiveAttack()].getHitState()) return;
         if (!this.#isFlipped){
             if(this.#position.x + this.#attacks[index].getPosition().x + attackSize.x >= this.#enemy.getPosition().x && 
             this.#position.x + this.#attacks[index].getPosition().x  <= this.#enemy.getPosition().x + this.#enemy.getSize().x &&
@@ -239,8 +242,10 @@ class Sprite {
     }
 
     hit(dmg){
+        this.#attacks[this.getActiveAttack()].setHitState(true);
         this.#health.hp -= dmg;
-        this.#health.healthBar.style.width = this.#health.hp;
+        console.log(this.#health.healthBar.style.width);
+        this.#health.healthBar.style.width = this.#health.hp +'%';
     }
 }
 

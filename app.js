@@ -2,6 +2,7 @@ var express = require("express");
 const path = require('path');
 var app = express();
 let rooms = {};
+let users = [];
 
 //SETTINGS
 app.set('PORT', process.env.PORT || 3000);
@@ -28,6 +29,7 @@ io.on('connection', socket => {
                 id: socket.id,
                 room: socketUser.roomName
             }
+            users[socket.id] = user;
             rooms[socketUser.roomName] = [user];
             socket.join(socketUser.roomName);
             return io.to(user.id).emit('createRoom', 1);
@@ -46,6 +48,7 @@ io.on('connection', socket => {
                 id: socket.id,
                 room: socketUser.roomName
             }
+            users[socket.id] = user;
             rooms[socketUser.roomName].push(user);
             socket.join(socketUser.roomName);
             console.log(rooms);
@@ -55,7 +58,11 @@ io.on('connection', socket => {
     
     socket.on("sendMove", input => {
         io.to(input.enemy).emit("sendMove", {number: input.number, x: input.x, y: input.y})
-    });
+    });  
 
-    
+    socket.on('disconnect', () => {
+        if (!(socket.id in users)) return;
+        rooms[users[socket.id].room] = rooms[users[socket.id].room].filter( user => user.id != socket.id );
+        if (rooms[users[socket.id].room].length == 0) delete rooms[users[socket.id].room];
+    })
 });
