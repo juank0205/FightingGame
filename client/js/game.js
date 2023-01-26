@@ -7,7 +7,7 @@ const player1 = new Player.Sprite({
     moveSpeed: { x: 6, y: 20, fastFall: 5 },
     gravity: 1,
     color: 'red',
-    healthBar: document.getElementById('health-player-2')
+    healthBar: document.getElementById('health-player-1')
 });
 
 const player2 = new Player.Sprite({
@@ -16,7 +16,7 @@ const player2 = new Player.Sprite({
     moveSpeed: { x: 6, y: 20, fastFall: 5 },
     gravity: 1,
     color: 'blue',
-    healthBar: document.getElementById('health-player-1')
+    healthBar: document.getElementById('health-player-2')
 });
 
 let player;
@@ -159,8 +159,8 @@ function animate() {
         c.fillRect(0, 0, canvas.width, canvas.height)
 
         checkInput();
-        player.manageFrameData();
-        enemy.manageFrameData();
+        player.manageAttack();
+        enemy.manageAttack();
 
         player.update(c);
         enemy.update(c);

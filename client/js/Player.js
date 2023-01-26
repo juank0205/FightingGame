@@ -8,20 +8,17 @@ class Sprite {
     #moveSpeed;
     #velocity;
     #gravity;
-
-    #frameCounter;
-    #activeAttackIndex;
-
-    #inAir;
-    #isFastFalling;
-    #isFlipped;
-    #canAttack;
-    #isAttacking;
-
-
-    #attacks;
     #color;
 
+    #activeAttackIndex = null;
+
+    #inAir = false;
+    #isFastFalling = false;
+    #isFlipped;
+    #canAttack = true;
+    #isAttacking = false;
+
+    #attacks;
     #enemy;
 
     constructor({ position, size, moveSpeed, gravity, color, healthBar}){
@@ -31,19 +28,11 @@ class Sprite {
         this.#velocity = {x: 0, y: 0};
         this.#moveSpeed = moveSpeed;
         this.#gravity = gravity;
-
         this.#color = color;
-        this.#frameCounter = 0;
-        this.#activeAttackIndex = null;
-
-        this.#inAir = false;
-        this.#isFastFalling = false;
-        this.#isAttacking = 0;
-        this.#canAttack = true;
 
         this.#attacks = [
             new attack.Attack({
-                id: 'Main Attack',
+                id: 0,
                 position: { x: 0, y: 0},
                 size: { x: 100, y: 50},
                 damage: 20,
@@ -52,72 +41,38 @@ class Sprite {
                     active: 15,
                     endlag: 6
                 },
-                moveSpeed: 2
-            }),
-            new attack.Attack({
-                id: 'Proyectile',
-                position: { x: 0, y: 0},
-                size: { x:100, y:50 },
-                damage: 10,
-                isProyectile: true,
-                frameData: {
-                    startup: 12,
-                    active: 60,
-                    endlag: 0
-                }
+                moveSpeed: 2,
+                parent: this
             })
+            // new attack.Attack({
+            //     id: 'Proyectile',
+            //     position: { x: 0, y: 0},
+            //     size: { x:100, y:50 },
+            //     damage: 10,
+            //     isProyectile: true,
+            //     frameData: {
+            //         startup: 12,
+            //         active: 60,
+            //         endlag: 0
+            //     }
+            // })
         ]
     }
 
     //--------------------------------------------------------
     //GETTERS
-    getPosition(){
-        return this.#position;
-    }
-
-    getSize(){
-        return this.#size;
-    }
-
-    getVelocity(){
-        return this.#size;
-    }
-
-    getMoveSpeed(){
-        return this.#moveSpeed;
-    }
-
-    getAttackingState(){
-        return this.#isAttacking;
-    }
-
-    getFrameCounter(){
-        return this.#frameCounter;
-    }
-
-    getActiveAttack(){
-        return this.#activeAttackIndex;
-    }
-
-    getCanAttack(){
-        return this.#canAttack;
-    }
+    getPosition =() => this.#position;
+    getSize = () => this.#size;
+    getVelocity = () => this.#size;
+    getMoveSpeed = () => this.#moveSpeed;
+    getAttackingState = () => this.#isAttacking;
+    getActiveAttack = () => this.#activeAttackIndex;
+    getCanAttack = () => this.#canAttack;
+    getFlip = () => this.#isFlipped;
+    getEnemy = () => this.#enemy;
 
     //--------------------------------------------------------
-    //SETTERS
-
-    setFrameCounter(state, index){
-        this.#frameCounter = this.#attacks[index].getFrameData(state);
-    }
-
-    updateFrameCounter(){
-        this.#frameCounter--;
-    }
-        
-    setAtackState(number){
-        this.#isAttacking = number;
-    }
-    
+    //SETTERS        
     setEnemy(enemy){
         this.#enemy = enemy;
     }
@@ -139,41 +94,16 @@ class Sprite {
     //FUNCTIONS
 
     startAttack(index){
-        if (this.getAttackingState()  == 0){
+        if (this.getCanAttack()){
             this.setActiveAttack(index);
             this.setCanAttack(false);
-            if(this.#attacks[getActiveAttack()].isProyectile)
-            this.setAtackState(1);
-            this.setFrameCounter('startup', index);
-            this.manageFrameData();
+            this.#attacks[index].startAttack();
         }
     }
 
-    manageFrameData(){
-        if(this.getActiveAttack() == null) return;
-        if(this.getAttackingState()== 0) return;
-        if(this.getAttackingState() == 1){
-            if (this.getFrameCounter() == 0){
-                this.setAtackState(2);
-                this.setFrameCounter('active', this.getActiveAttack());
-            }
-        }
-        if(this.getAttackingState() == 2){
-            if(this.getFrameCounter() != 0){
-                this.attack(this.getActiveAttack());
-            } else{
-                this.setAtackState(3);
-                this.setFrameCounter('endlag', this.getActiveAttack());
-            }
-        }
-        if(this.getAttackingState() == 3){
-            if (this.getFrameCounter() == 0){
-                this.setAtackState(0);
-                this.#attacks[this.getActiveAttack()].setHitState(false);
-                this.setActiveAttack(null)
-            }
-        }
-        this.updateFrameCounter();
+    manageAttack(){
+        if (this.getActiveAttack() == null) return;
+        this.#attacks[this.getActiveAttack()].manageFrameData();
     }
 
     flip(){
@@ -239,45 +169,7 @@ class Sprite {
         }
     }
 
-    attack(index){
-        c.fillStyle = 'green'
-        let attackSize = { x: this.#attacks[index].getSize().x, y: this.#attacks[index].getSize().y};
-        this.#isFlipped ? attackSize.x *= -1: attackSize.x *=1; 
-        if (this.#isFlipped){
-            c.fillRect(
-                this.getPosition().x + this.#attacks[index].getPosition().x,
-                this.getPosition().y + this.#attacks[index].getPosition().y,
-                attackSize.x,
-                attackSize.y,  
-            )
-        } else{
-            c.fillRect(
-                this.getPosition().x + this.getSize().x + this.#attacks[index].getPosition().x,
-                this.getPosition().y + this.#attacks[index].getPosition().y,
-                attackSize.x,
-                attackSize.y,  
-            )
-        }
-        if (this.#attacks[this.getActiveAttack()].getHitState()) return;
-        if (!this.#isFlipped){
-            if(this.#position.x + this.getSize().x + this.#attacks[index].getPosition().x + attackSize.x >= this.#enemy.getPosition().x && 
-            this.#position.x + this.getSize().x + this.#attacks[index].getPosition().x  <= this.#enemy.getPosition().x + this.#enemy.getSize().x &&
-            this.#position.y + this.#attacks[index].getPosition().y + attackSize.y >= this.#enemy.getPosition().y &&
-            this.#position.y + this.#attacks[index].getPosition().y <= this.#enemy.getPosition().y + this.#enemy.getSize().y){
-                this.hit(this.#attacks[index].getDamage());
-            }
-        } else{
-            if(this.#position.x + this.#attacks[index].getPosition().x + attackSize.x <= this.#enemy.getPosition().x + this.#enemy.getSize().x && 
-            this.#position.x + this.#attacks[index].getPosition().x  >= this.#enemy.getPosition().x  &&
-            this.#position.y + this.#attacks[index].getPosition().y + attackSize.y >= this.#enemy.getPosition().y &&
-            this.#position.y + this.#attacks[index].getPosition().y <= this.#enemy.getPosition().y + this.#enemy.getSize().y){
-                this.hit(this.#attacks[index].getDamage());
-            }
-        }
-    }
-
     hit(dmg){
-        this.#attacks[this.getActiveAttack()].setHitState(true);
         this.#health.hp -= dmg;
         console.log(this.#health.healthBar.style.width);
         this.#health.healthBar.style.width = this.#health.hp +'%';
